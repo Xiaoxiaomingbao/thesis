@@ -1,8 +1,26 @@
 \subsection{问题引入}\label{subsec:intro}
 
+本文在 Data Structures for Computing Unique Palindromes in Static and Non-Static Strings~\cite{Mieno2024}
+（以下称原文）的基础上，继续探讨静态串和非静态串的唯一回文子串问题。本文首先概述原文的主要内容和算法设计思路，
+并调研回文串领域的问题与解决方法，再描述原文中算法的不足之处，并针对不足之处提出改进算法。
 
-\subsection{LCE问题的数据结构}\label{subsec:lce}
+\begin{description}
+    \item [MUPS] 给定串$T$，$1 \leq i \leq j ||T||$，回文子串$u = T[i..j]$，
+    如果$u$在$T$中是唯一的且$u^{\prime} = T[i + 1..j - 1]$在$T$中不唯一，则称$u$是$T$的最小唯一回文子串
+    (minimal unique palindromic substring, MUPS)。
+    \item [SUPS] 给定串$T$
+\end{description}
 
-\subsection{RmQ数据结构}\label{subsec:rmq}
+本文在概述原文时，着重介绍数据结构的设计。对于原文中涉及的大量引理(Lemma)、定理(Theorem)、命题(Proposition)、
+推论(Corollary)，本文直接引用其中的结论，不再关注其证明过程，因为原文提供了详尽的证明或证明所在的参考文献。
+由于原文中直接引用了一些不太常用的数据结构，如后缀树、van Emde Boas 树等，本文会适当补充相关数据结构的定义、实现、性质。
+
+\subsection{数据结构的工具}\label{subsec:fond}
+
+\subsubsection{最长公共扩展(LCE)问题}\label{subsubsec:lce}
+
+\subsubsection{区域最小值请求(RmQ)、前驱(Predecessor)和后继(Successor)}\label{subsubsec:rmq}
+
+\subsection{SUPS问题的数据结构}\label{subsec:sups}
 
 \subsection{算法实例}\label{subsec:eg}
