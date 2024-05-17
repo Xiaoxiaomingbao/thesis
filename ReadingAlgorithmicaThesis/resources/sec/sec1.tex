@@ -1,12 +1,10 @@
-\subsection{问题引入}\label{subsec:intro}
-
-本文在 Data Structures for Computing Unique Palindromes in Static and Non-Static Strings~\cite{Mieno2024}
-（以下称原文）的基础上，继续探讨静态串和非静态串的唯一回文子串问题。本文首先概述原文的主要内容和算法设计思路，
-并调研回文串领域的问题与解决方法，再描述原文中算法的不足之处，并针对不足之处提出改进算法。
 
 本文在概述原文时，着重介绍数据结构的设计。对于原文中涉及的大量引理(Lemma)、定理(Theorem)、命题(Proposition)、
 推论(Corollary)，本文直接引用其中的结论，不再关注其证明过程，因为原文提供了详尽的证明或证明所在的参考文献。
 由于原文中直接引用了一些不太常用的数据结构，如后缀树、van Emde Boas树等，本文会适当补充相关数据结构的定义、实现、性质。
+对于原文中定义不够明确的概念，本文给出了严格的定义，并描述和论证了相关性质。
+
+\subsection{问题引入}\label{subsec:intro}
 
 \begin{description}
     \item [MUPS] 给定串$T$，$1 \leq i \leq j \leq ||T||$，回文子串$u = T[i..j]$，如果$u$在$T$中是唯一的，
@@ -15,8 +13,10 @@
     任何更短的包含区间$[p,q]$的$T$的回文子串都在$T$中不唯一，则称$v$是对区间$[p,q]$的$T$的最短唯一回文子串
     (shortest unique palindromic substring)，记作$v = \mathrm{SUPS}_T ([p,q])$.
     \item[point SUPS] 区间SUPS问题在$p = q$的情况下退化为点的SUPS问题，记作$v = \mathrm{SUPS}_T (p)$.
-    \item[maximal palindrome] MUPS向外扩展，即每次起点向前移动一位，终点向后移动一位，直至破坏回文性为止。
-    在此过程中可以得到“极大回文子串”(maximal palindrome).
+    \item[ME] MUPS向外扩展，即每次起点向前移动一位，终点向后移动一位，直至破坏回文性为止。
+    在此过程中可以得到“极小唯一回文子串的极大扩展”(maximal extension of MUPS).
+    \item[MP] 对任意一个半整数，即1, 1.5, 2, 2.5 .. , n \footnote{原文中串从1开始标号，本文也采用这种规范。}，
+    都能求得以其为中心的极大回文子串(maximal palindrome).
 \end{description}
 
 需要注意的是，MUPS是极小的，强调的是MUPS都无法在自身基础上再缩小一点，因为再缩小会违背MUPS的唯一性，
@@ -33,12 +33,12 @@ MUPS的定义并不关心每个MUPS与其他MUPS的长度比较。SUPS是最短�
 每一个MUPS都唯一对应一个极大回文子串。极大回文子串具有唯一性和非嵌套性，可用反证法论证如下：
 
 假设存在两个完全一致的极大回文子串$m_1$和$m_2$，$m_1$对应的MUPS为$M_1$，以$m_1$和$M_1$的相对位置关系在$m_2$中找到回文子串$M_2$，
-$M_2$一定与$M_1$不重合，于是违背了$M_1$作为SUPS的唯一性，极大回文子串的唯一性得证。
+$M_2$一定与$M_1$不重合，于是违背了$M_1$作为SUPS的唯一性。极大回文子串的唯一性得证。
 
 取极大回文子串$m_1 = T[s_1..e_1]$，极大回文子串$m_2 = [s_2..e_2]$，满足$s_1 \leq s_2 \leq e_1 \leq e_2 $，
 且$s_1 \leq s_2$和$e_1 \leq e_2$不能同时取等。找到$m_1$的对称轴$l$，若$m_2$关于$l$对称，则$m_2$不满足极大回文子串定义中的极大性；
 若$m_2$不关于$l$对称，则取串$m_3$关于轴$l$与$m_2$对称，由于$m_2$是回文串，$m_3$与$m_2$完全一致，
-$m_2$不满足上文已证的极大回文子串的唯一性。
+$m_2$不满足上文已证的极大回文子串的唯一性。极大回文子串的非嵌套性得证。
 
 \subsection{数据结构的工具}\label{subsec:tools}
 

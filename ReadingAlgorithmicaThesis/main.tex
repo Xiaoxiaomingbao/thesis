@@ -3,16 +3,34 @@
 
 % Packages
 \usepackage{amsmath}
-\usepackage{url}
 
-\title{唯一回文子串问题数据结构的改进}
+\title{全动态模型下最短唯一回文子串问题的数据结构与算法}
 \author{申治洺}
-\date{2024年5月20日}
+\date{2024年5月18日}
 
 % Document
 \begin{document}
     \maketitle
 
+    \begin{abstract}
+        本文在 Data Structures for Computing Unique Palindromes in Static and Non-Static Strings\cite{Mieno2024}
+        （以下称原文）的基础上，继续探讨了最短唯一回文子串问题的求解。本文使用较大篇幅概述原文，尤其是Inoue算法\cite{INOUE2018122}及其改进，
+        这是求解最短唯一回文子串问题的基础。本文调研了回文子串领域的研究成果，主要包括最短唯一回文子串、极小唯一回文子串、极大回文子串这三个方面。
+        最后，本文针对原文仅支持两种半动态模型，不支持全动态模型，适用范围过于狭窄的缺陷，提出了一种全动态模型，
+        并提出了支持在动态串的任意位置插入和删除操作的求解最短唯一回文子串问题的算法。该算法的空间复杂度为$O(n)$，
+        初始构建数据结构的时间复杂度为$O(n)$，应对插入或删除操作，更新数据结构并计算最短唯一回文子串的时间复杂度为$\tilde{O}(m)$，
+        其中$n$为原始串的长度，$m$为被操作位到串尾的距离。
+
+        \textbf{关键词}
+        \begin{itemize}
+            \item 最短唯一回文子串(shortest unique palindromic substring, SUPS)
+            \item 极小唯一回文子串(minimal unique palindromic substring, MUPS)
+            \item 极大回文子串(maximal palindrome)
+            \item 滑窗模型(sliding-window model)
+            \item 替换模型(after-substitution model)
+        \end{itemize}
+    \end{abstract}
+    
     \section{原文概述}\label{sec:1}
     \input{resources/sec/sec1}
 
@@ -25,6 +43,6 @@
     \section{改进算法的提出}\label{sec:4}
     \input{resources/sec/sec4}
 
-    \bibliographystyle{plain}
+    \bibliographystyle{IEEEtran}
     \bibliography{resources/references}
 \end{document}
