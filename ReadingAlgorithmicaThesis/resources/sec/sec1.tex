@@ -7,9 +7,9 @@
 \subsection{问题引入}\label{subsec:intro}
 
 \begin{description}
-    \item [MUPS] 给定串$T$，$1 \leq i \leq j \leq ||T||$，回文子串$u = T[i..j]$，如果$u$在$T$中是唯一的，
+    \item[MUPS] 给定串$T$，$1 \leq i \leq j \leq ||T||$，回文子串$u = T[i..j]$，如果$u$在$T$中是唯一的，
     $u^{\prime} = T[i + 1..j - 1]$在$T$中不唯一，则称$u$是$T$的极小唯一回文子串(minimal unique palindromic substring).
-    \item [interval SUPS] 给定串$T$和区间$[p,q]$，回文子串$v = T[i..j]$，$v$在$T$中唯一且包含区间$[p,q]$，
+    \item[interval SUPS] 给定串$T$和区间$[p,q]$，回文子串$v = T[i..j]$，$v$在$T$中唯一且包含区间$[p,q]$，
     任何更短的包含区间$[p,q]$的$T$的回文子串都在$T$中不唯一，则称$v$是对区间$[p,q]$的$T$的最短唯一回文子串
     (shortest unique palindromic substring)，记作$v = \mathrm{SUPS}_T ([p,q])$.
     \item[point SUPS] 区间SUPS问题在$p = q$的情况下退化为点的SUPS问题，记作$v = \mathrm{SUPS}_T (p)$.
@@ -33,10 +33,10 @@ MUPS的定义并不关心每个MUPS与其他MUPS的长度比较。SUPS是最短�
 
 ME具有唯一性和非嵌套性，可用反证法论证如下：
 
-假设存在两个完全一致的ME$m_1$和$m_2$，$m_1$对应的MUPS为$M_1$，以$m_1$和$M_1$的相对位置关系在$m_2$中找到回文子串$M_2$，
+假设存在两个完全一致的ME $m_1$和$m_2$，$m_1$对应的MUPS为$M_1$，以$m_1$和$M_1$的相对位置关系在$m_2$中找到回文子串$M_2$，
 $M_2$一定与$M_1$不重合，于是违背了$M_1$作为SUPS的唯一性。ME的唯一性得证。
 
-取ME$m_1 = T[s_1..e_1]$，ME$m_2 = [s_2..e_2]$，满足$s_1 \leq s_2 \leq e_1 \leq e_2 $，
+取ME $m_1 = T[s_1..e_1]$，ME $m_2 = [s_2..e_2]$，满足$s_1 \leq s_2 \leq e_1 \leq e_2 $，
 且$s_1 \leq s_2$和$e_1 \leq e_2$不能同时取等。找到$m_1$的对称轴$l$，若$m_2$关于$l$对称，则$m_2$不满足ME定义中的极大性；
 若$m_2$不关于$l$对称，则取串$m_3$关于轴$l$与$m_2$对称，由于$m_2$是回文串，$m_3$与$m_2$完全一致，
 $m_2$不满足上文已证的ME的唯一性。ME的非嵌套性得证。
@@ -50,9 +50,9 @@ $m_2$不满足上文已证的ME的唯一性。ME的非嵌套性得证。
 易知，“缩小串集”包含了所有回文子串，也就包含了所有ME。不唯一的MP缩小产生的回文串也是不唯一的，因而不能产生ME。对唯一的MP进行缩小，缩小的尽头是空串，
 必然丧失唯一性。因此，在缩小的过程中一定存在唯一性发生改变的临界，即可找到一个MUPS，则该唯一的MP也就成为一个ME。综上，唯一且非空的MP与ME一一对应。
 
-\subsubsection{最长公共扩展(LCE)与后缀树(Suffix tree)}\label{subsubsec:lce}
+\subsubsection{最长公共扩展(LCE)与后缀树(suffix tree)}\label{subsubsec:lce}
 
-对于长度为$n$的串$S$，后缀树(Suffix tree)定义为这样一棵树，满足如下五个条件\cite{suffix}：
+对于长度为$n$的串$S$，后缀树(suffix tree)定义为这样一棵树，满足如下五个条件\footnote{后缀树的定义和图\ref{fig:suffix}引自Suffix tree \textit{Wikipedia}，可参见https://en.wikipedia.org/wiki/Suffix\_tree}：
 \begin{itemize}
     \item 有$n$个子节点，分别编号$1$至$n$
     \item 除根节点外，每个非叶节点都有至少两个子节点
@@ -61,23 +61,23 @@ $m_2$不满足上文已证的ME的唯一性。ME的非嵌套性得证。
     \item 从根节点到叶节点$i$，将所有边的标记依次拼接起来，可得到后缀$S[i..n]$
 \end{itemize}
 
-\begin{figure*}[h]
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{resources/fig/Suffix_tree_BANANA}
-    \caption{$\mathrm{BANANA\$}$的后缀树，虚线为构建过程中的辅助线\cite{suffix}}
-\end{figure*}
+    \caption{$\mathrm{BANANA\$}$的后缀树，虚线为构建过程中的辅助线}\label{fig:suffix}
+\end{figure}
 
 最长公共扩展(longest common extension, LCE)问题是对一个给定的串$T$，给定的整数$i,j$，满足$1 \leq i,j \leq n$，
 计算出两个后缀$T[i..n]$和$T[j..n]$的最长公共前缀的长度。
 
-\subsubsection{区域最小值请求(RmQ)及变体LogRmQ}\label{subsubsec:rmq}
+\subsubsection{区域最小值请求(RmQ)及其变体LogRmQ}\label{subsubsec:rmq}
 
 区域最小值请求(range minimum query ,RmQ)是对一个给定的整型数组$A$，$A$上的两个下标$i,j$，满足$i \leq j$，
 计算出下标$k$使得$A[k]$为$A[i..j]$上的最小值。注意RmQ数据结构并不要求整型数组有序。
 
-\subsection{前驱(Predecessor)、后继(Successor)与van Emde Boas树}\label{subsec:van}
+\subsection{前驱(predecessor)、后继(successor)与van Emde Boas树}\label{subsec:van}
 
-对一个不减的整型数组$B$，给定整型数$x$，定义前驱(Predecessor)是小于$x$的最大值；同理，定义后继(Successor)是大于$x$的最小值。
+对一个不减的整型数组$B$，给定整型数$x$，定义前驱(predecessor)是小于$x$的最大值；同理，定义后继(successor)是大于$x$的最小值。
 
 \subsection{Inoue算法概述}\label{subsec:inoue}
 

@@ -1,0 +1,29 @@
+
+回文串是从前向后和从后向前读取结果相同的序列。由于其独特的性质以及在模式识别、数据压缩和DNA序列分析中的广泛应用，在生物信息学、计算机科学等领域，
+对回文串的研究不断。本节探讨了回文串的主要研究方向，包括但不限于极小唯一回文子串、最短唯一回文子串和极大回文子串。
+
+\subsection{极小唯一回文子串}\label{subsec:mups}
+
+极小唯一回文子串(MUPS)的定义和性质详见\ref{subsec:intro}。求解MUPS的算法设计策略总结如下：
+\begin{itemize}
+    \item 基于后缀树。对输入的串构建后缀树，从后缀树中获取所有极小唯一的子串，再从中提取回文串\cite{Gusfield_1997}。
+    这种策略需要消耗$O(n)$的时间以完成构建后缀树的预处理\cite{Ukkonen95}。
+    \item 基于动态规划。使用一个动态规划的表格标记出所有回文子串，再依次检查每个回文子串是否唯一。时间复杂度为$O(n)$\cite{Manacher75}。
+\end{itemize}
+
+\subsection{极大回文子串}\label{subsec:mp}
+
+极大回文子串(MP)的定义和性质详见\ref{subsec:intro}。求解MP的算法设计策略总结如下：
+\begin{itemize}
+    \item 使用Manacher算法\cite{Manacher75}。这是一个求解MP的在线(on-line)算法\footnote{即支持一位一位地按顺序输入串，运行过程中的结果是对于已输入串的问题解。}，可以在线性时间内获得结果。
+    \item 使用Eertree (Palindromic Tree)\cite{RubinchikS18}。这种数据结构可以储存所有互异回文子串，以便快速求解MP。
+\end{itemize}
+
+\subsection{最短唯一回文子串}\label{subsec:sups}
+
+最短唯一回文子串(SUPS)的定义和性质详见\ref{subsec:intro}。求解SUPS问题，可以使用Inoue算法\cite{Inoue2018}，详见\ref{subsec:inoue}；
+以及原文\cite{Mieno2024}对Inoue算法的改进算法，详见\ref{subsec:progress}和\ref{subsec:example}。
+
+\subsection{回文分解}\label{subsec:factorize}
+回文分解(palindromic factorization)是将一个串划分为最少数量的回文串的过程，常用于数据压缩和文本挖掘。借助Eertree数据结构，
+k-分解问题可以在$O(kn)$时间内完成\cite{RubinchikS18}。
