@@ -68,19 +68,66 @@ $m_2$不满足上文已证的ME的唯一性。ME的非嵌套性得证。
 \end{figure}
 
 最长公共扩展(longest common extension, LCE)问题是对一个给定的串$T$，给定的整数$i,j$，满足$1 \leq i,j \leq n$，
-计算出两个后缀$T[i..n]$和$T[j..n]$的最长公共前缀的长度。
+计算出两个后缀$T[i..n]$和$T[j..n]$的最长公共前缀的长度。LCE问题可以通过构建串$T\$$\footnote{这里的\$，图\ref{fig:suffix}中的\$，以及下文出现的\#，都指不属于字母表$\Sigma$的特殊字符。}
+的后缀树\footnote{解决某一问题的常用数据结构可用问题名代指。例如，这里的数据结构可称为LCE数据结构。}在常数时间内求得\cite{Gusfield_1997}。我们可以构造一个双向LCE数据结构，即对串$T\#T^R\$$构造后缀树，从而实现在常数时间内求得：
+\begin{itemize}
+    \item $T$的任意两后缀的最长公共前缀
+    \item $T$的任意两前缀的逆的最长公共前缀
+    \item $T$的任意后缀和$T$的任意前缀的逆的最长公共前缀
+\end{itemize}
+由第三点易知，对任意位$c$，将$T$分割为前缀$T_1$和后缀$T_2$，我们可以用双向LCE数据结构求得$T_2$和$T_1^R$的最长公共前缀，即以$c$为中心的极大回文子串。
 
 \subsubsection{区域最小值请求(RmQ)及其变体LogRmQ}\label{subsubsec:rmq}
 
-区域最小值请求(range minimum query ,RmQ)是对一个给定的整型数组$A$，$A$上的两个下标$i,j$，满足$i \leq j$，
-计算出下标$k$使得$A[k]$为$A[i..j]$上的最小值。注意RmQ数据结构并不要求整型数组有序。
+区域最小值请求(range minimum query, RmQ)是对一个给定的整型数组$A$，$A$上的两个下标$i,j$，满足$i \leq j$，
+计算出下标$k$使得$A[k]$为$A[i..j]$上的最小值。需要注意的是，有时最小值有多个，而RmQ每次只能找到其中一个。
+存在这样一个数据结构，可以在$O(n)$时间内构建，并在$O(1)$时间内回应任一个RmQ。
+
+对于一个RmQ，如果任何请求的范围宽度都满足$O(\mathrm{polylog}(n))$，则称这样的RmQ为LogRmQ。
 
 \subsection{前驱(predecessor)、后继(successor)与van Emde Boas树}\label{subsec:van}
 
 对一个不减的整型数组$B$，给定整型数$x$，定义前驱(predecessor)是小于$x$的最大值；同理，定义后继(successor)是大于$x$的最小值。
+我们使用van Emde Boas树求解前驱和后继。van Emde Boas树的空间复杂度为$O(U)$，各项操作的时间复杂度为$O(\log\log U)$，
+其中$U$为全局大小(universal size)\cite{Cormen3ed}。在回文串领域，取$U = n$.
 
 \subsection{Inoue算法概述}\label{subsec:inoue}
 
+Inoue算法\cite{Inoue2018}的数据结构由下面五部分组成：
+\begin{itemize}
+    \item 所有MUPS的集合
+    \item 所有MP的集合
+    \item 对所有MUPS开始位置组成的数组求后继的数据结构
+    \item 对所有MUPS结束位置组成的数组求前驱的数据结构
+    \item 所有MUPS的长度，按照MUPS的开始位置排序，组成的数组$\mathrm{MUPSlen}$，以及对该数组的RmQ数据结构
+\end{itemize}
+
+对给定的区间$[p,q]$，通过分别对相应数组求$p$的前驱和$q$的后继，考察区间$[p,q]$覆盖MUPS的情况：
+\begin{enumerate}
+    \item $[p,q]$只覆盖1个MUPS，则该MUPS的能覆盖区间$[p,q]$的最小扩展即为所求。
+    \item $[p,q]$覆盖多个MUPS，则无解，因为任何SUPS最多只能包含一个MUPS\cite{Inoue2018}。
+    \item 找不到这样的MUPS，再分为如下三种情况。
+\end{enumerate}
+
+\begin{enumerate}
+    \item 基于$q$前结束的最右边的MUPS $M_l$的扩展
+    \item 一个覆盖$[p,q]$的MUPS
+    \item 基于$p$前开始的最左边的MUPS $M_r$的扩展
+\end{enumerate}
+依次分析求解即可。其中要利用所有MP的集合求解特定中心的MP，以及递归地使用RmQ以求出所有SUPS。所有MP的集合和所有MUPS的集合可在$O(n)$时间内求得\cite{Inoue2018,Manacher75}，
+同时可构造完相应的前驱、后继、RmQ数据结构，且该算法数据结构五部分的空间复杂度都为$O(n)$，所以总的来说，空间复杂度为$O(n)$，预处理的时间复杂度为$O(n)$.
+设共有满足条件的SUPS $\alpha$个，该算法中各个元操作的时间复杂度都为$O(1)$，且$\alpha$决定了最后RmQ递归搜索的次数，所以该算法求解SUPS问题的时间复杂度为$O(\alpha)$.
+
 \subsection{原文对Inoue算法的改进}\label{subsec:progress}
 
+原文对Inoue算法的改进可总结为如下几个方面：
+\begin{itemize}
+    \item 不再保留所有MP的集合，而是使用\ref{subsubsec:lce}中的双向LCE数据结构求解特定中心的MP。但仍需$O(n)$的空间和$O(n)$时间预处理。
+    \item 使用位数组\footnote{只有0和1两种元素的数组，类似于Java中的boolean型数组。}$B, E, L$分别保存MUPS的起点、MUPS的终点、ME的起点。
+    ME的终点不需要保存，因为ME和MUPS一一对应，可由MUPS的终点和MUPS起点与ME起点之差计算出ME的终点。但仍需$O(n)$的空间和$O(n)$时间预处理。
+    \item 证明不等式$|\mathrm{SUPS}_T ([p,q])| \leq 4$恒成立（原文中的Theorem 1），即$\alpha \leq 4$，故$O(\alpha) = O(1)$.
+\end{itemize}
+
 \subsection{原文算法的示例}\label{subsec:example}
+
+可参见原文Fig.6。
